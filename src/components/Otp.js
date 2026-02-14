@@ -87,6 +87,14 @@ const Otp = ({ email, otpExpiry, initialAttempts = 0, onVerifyOtp, onResendOtp }
                 <Text style={styles.subtitle}>
                     We sent a code to <Text style={styles.emailText}>{email}</Text>
                 </Text>
+
+                {/* --- DEMO ONLY: Display the OTP --- */}
+                {generatedOtp && (
+                    <View style={styles.demoOtpContainer}>
+                        <Text style={styles.demoOtpLabel}>Demo / Testing Only</Text>
+                        <Text style={styles.demoOtpValue}>{generatedOtp}</Text>
+                    </View>
+                )}
             </View>
 
             <View style={styles.form}>
@@ -168,6 +176,29 @@ const styles = StyleSheet.create({
     emailText: {
         fontWeight: '600',
         color: '#334155',
+    },
+    demoOtpContainer: {
+        marginTop: 16,
+        padding: 12,
+        backgroundColor: '#fef9c3', // yellow-100
+        borderWidth: 1,
+        borderColor: '#facc15', // yellow-400
+        borderRadius: 8,
+        alignItems: 'center',
+        width: '100%',
+    },
+    demoOtpLabel: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: '#854d0e', // yellow-800
+        marginBottom: 4,
+        textTransform: 'uppercase',
+    },
+    demoOtpValue: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#1e293b',
+        letterSpacing: 2,
     },
     form: {
         gap: 24,

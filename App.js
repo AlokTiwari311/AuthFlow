@@ -25,6 +25,8 @@ export default function App() {
     const [otpExpiry, setOtpExpiry] = useState(null);
     // otpAttempts: Counting how many times they guessed wrong
     const [otpAttempts, setOtpAttempts] = useState(0);
+    // generatedOtp: The secret code (Displayed for DEMO purposes)
+    const [generatedOtp, setGeneratedOtp] = useState(null);
 
     // --- EFFECT: The "Wake Up" Routine ---
     // This runs ONCE when the app first loads (like when you hit refresh)
@@ -51,6 +53,9 @@ export default function App() {
                         // Ticket is good! Restore their spot in line.
                         setOtpExpiry(otpData.expiresAt);
                         setOtpAttempts(otpData.attempts || 0);
+                        // In a real app we wouldn't show this again, but for demo we retrieve it if possible
+                        // However, storageService.getOtpData returns the object.
+                        setGeneratedOtp(otpData.otp); 
                         console.log(`[OTP SERVICE] Restored OTP for ${pendingEmail}: ${otpData.otp}`);
                         setStep('otp');
                     } else {
@@ -82,6 +87,7 @@ export default function App() {
         // Save the expiry time so we can show the countdown
         setOtpExpiry(otpData.expiresAt);
         setOtpAttempts(0); // Reset "Bad Guesses" to 0
+        setGeneratedOtp(otpData.otp); // Show the code for Demo
 
         setStep('otp'); // Move to the next screen
     };
@@ -98,6 +104,7 @@ export default function App() {
             await AsyncStorage.removeItem('pa_pending_email'); // Only needed pending email while verifying
 
             setSession(newSession);
+            setGeneratedOtp(null); // Hide the code
             setStep('session'); // Open the door!
         }
         // If failed, we return the error so the Otp component can show it (e.g., "Wrong Code")
@@ -110,6 +117,7 @@ export default function App() {
         const otpData = await otpService.generateOtp(inputEmail);
         setOtpExpiry(otpData.expiresAt);
         setOtpAttempts(0); // Reset strikes
+        setGeneratedOtp(otpData.otp); // Update the code
     };
 
     // --- ACTION: User Clicked Logout ---
@@ -118,6 +126,7 @@ export default function App() {
         await AsyncStorage.removeItem('pa_pending_email'); // Clear any pending data
         setSession(null);
         setEmail('');
+        setGeneratedOtp(null);
         setStep('email'); // Kick them out to the street (Login screen)
     };
 
@@ -154,6 +163,7 @@ export default function App() {
                         email={email}
                         otpExpiry={otpExpiry}
                         initialAttempts={otpAttempts}
+                        generatedOtp={generatedOtp}
                         onVerifyOtp={handleVerifyOtp}
                         onResendOtp={handleResendOtp}
                     />
