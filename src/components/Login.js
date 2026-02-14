@@ -1,38 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 
-/**
- * [ROLE: The Gatekeeper]
- * This component is the front door. It asks for your "Ticket" (Email).
- * It checks if the ticket looks real before bothering the Boss (App.jsx).
- */
 const Login = ({ onSendOtp }) => {
-    // --- STATE: Small Notebook ---
-    // email: What the user is typing right now
     const [email, setEmail] = useState('');
-    // error: If we need to shout an error message (like "Invalid Email!")
     const [error, setError] = useState('');
 
-    // --- ACTION: User hits "Enter" or "Send OTP" ---
     const handleSubmit = () => {
-        // 1. CHECK: Is the email blank? Does it look like an email?
-        // /\S+@\S+\.\S+/ is a "Regex" pattern looking for "text@text.text"
-        // Stricter email validation:
-        // - Local part: letters, digits, dots, hyphens, underscores, plus signs
-        // - @ symbol
-        // - Domain: letters, digits, dots, hyphens (at least one dot)
-        // - TLD: at least 2 letters
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!email || !emailRegex.test(email.trim())) {
-            // If bad, show error and STOP here.
             setError('Please enter a valid email address.');
             return;
         }
 
-        // 2. PASS: Clear any old errors.
         setError('');
-
-        // 3. CALL BOSS: "Hey App! This email is good, let them in!"
         onSendOtp(email);
     };
 
@@ -57,7 +37,6 @@ const Login = ({ onSendOtp }) => {
                         autoCorrect={false}
                         autoFocus={true}
                     />
-                    {/* Only show this red text if there is an error message */}
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
                 </View>
 
@@ -147,7 +126,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 16,
         borderRadius: 12,
-        backgroundColor: '#4f46e5', // Indigo-600
+        backgroundColor: '#4f46e5',
         ...Platform.select({
              web: {
                  boxShadow: '0 4px 8px -2px rgba(99, 102, 241, 0.3)',
