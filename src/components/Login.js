@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 
 /**
  * [ROLE: The Gatekeeper]
@@ -81,11 +81,18 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: 'white',
         borderRadius: 24,
-        shadowColor: '#e0e7ff',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.5,
-        shadowRadius: 20,
-        elevation: 10,
+        ...Platform.select({
+            web: {
+                boxShadow: '0 10px 20px -5px rgba(224, 231, 255, 0.5)',
+            },
+            default: {
+                shadowColor: '#e0e7ff',
+                shadowOffset: { width: 0, height: 10 },
+                shadowOpacity: 0.5,
+                shadowRadius: 20,
+                elevation: 10,
+            },
+        }),
         borderWidth: 1,
         borderColor: '#f1f5f9',
     },
@@ -141,11 +148,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         borderRadius: 12,
         backgroundColor: '#4f46e5', // Indigo-600
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 5,
+        ...Platform.select({
+             web: {
+                 boxShadow: '0 4px 8px -2px rgba(99, 102, 241, 0.3)',
+             },
+             default: {
+                 shadowColor: '#6366f1',
+                 shadowOffset: { width: 0, height: 4 },
+                 shadowOpacity: 0.3,
+                 shadowRadius: 8,
+                 elevation: 5,
+            }
+        }),
         alignItems: 'center',
     },
     buttonContent: {

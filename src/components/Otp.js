@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 
 /**
  * [ROLE: The Security Check]
@@ -87,14 +87,6 @@ const Otp = ({ email, otpExpiry, initialAttempts = 0, onVerifyOtp, onResendOtp }
                 <Text style={styles.subtitle}>
                     We sent a code to <Text style={styles.emailText}>{email}</Text>
                 </Text>
-
-                {/* --- DEMO ONLY: Display the OTP --- */}
-                {generatedOtp && (
-                    <View style={styles.demoOtpContainer}>
-                        <Text style={styles.demoOtpLabel}>Demo / Testing Only</Text>
-                        <Text style={styles.demoOtpValue}>{generatedOtp}</Text>
-                    </View>
-                )}
             </View>
 
             <View style={styles.form}>
@@ -150,11 +142,18 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: 'white',
         borderRadius: 24,
-        shadowColor: '#e0e7ff',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.5,
-        shadowRadius: 20,
-        elevation: 10,
+        ...Platform.select({
+            web: {
+                boxShadow: '0 10px 20px -5px rgba(224, 231, 255, 0.5)',
+            },
+            default: {
+                shadowColor: '#e0e7ff',
+                shadowOffset: { width: 0, height: 10 },
+                shadowOpacity: 0.5,
+                shadowRadius: 20,
+                elevation: 10,
+            },
+        }),
         borderWidth: 1,
         borderColor: '#f1f5f9',
     },
@@ -176,29 +175,6 @@ const styles = StyleSheet.create({
     emailText: {
         fontWeight: '600',
         color: '#334155',
-    },
-    demoOtpContainer: {
-        marginTop: 16,
-        padding: 12,
-        backgroundColor: '#fef9c3', // yellow-100
-        borderWidth: 1,
-        borderColor: '#facc15', // yellow-400
-        borderRadius: 8,
-        alignItems: 'center',
-        width: '100%',
-    },
-    demoOtpLabel: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: '#854d0e', // yellow-800
-        marginBottom: 4,
-        textTransform: 'uppercase',
-    },
-    demoOtpValue: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#1e293b',
-        letterSpacing: 2,
     },
     form: {
         gap: 24,
@@ -238,17 +214,29 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         borderRadius: 12,
         backgroundColor: '#4f46e5', // Indigo-600
-        shadowColor: '#6366f1',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 5,
+        ...Platform.select({
+             web: {
+                 boxShadow: '0 4px 8px -2px rgba(99, 102, 241, 0.3)',
+             },
+             default: {
+                 shadowColor: '#6366f1',
+                 shadowOffset: { width: 0, height: 4 },
+                 shadowOpacity: 0.3,
+                 shadowRadius: 8,
+                 elevation: 5,
+            }
+        }),
         alignItems: 'center',
     },
     buttonDisabled: {
         backgroundColor: '#94a3b8', // Gray
-        shadowOpacity: 0,
-        elevation: 0,
+        ...Platform.select({
+            web: { boxShadow: 'none' },
+            default: {
+                shadowOpacity: 0,
+                elevation: 0,
+            }
+        }),
     },
     buttonText: {
         fontSize: 16,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useSessionTimer } from '../hooks/useSessionTimer';
 
 /**
@@ -56,11 +56,18 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: 'white',
         borderRadius: 24,
-        shadowColor: '#10b981', // Emerald shadow
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.3,
-        shadowRadius: 20,
-        elevation: 10,
+        ...Platform.select({
+            web: {
+                boxShadow: '0 10px 20px -5px rgba(16, 185, 129, 0.3)', // Emerald shadow
+            },
+            default: {
+                shadowColor: '#10b981', // Emerald shadow
+                shadowOffset: { width: 0, height: 10 },
+                shadowOpacity: 0.3,
+                shadowRadius: 20,
+                elevation: 10,
+            },
+        }),
         borderWidth: 1,
         borderColor: '#f1f5f9',
     },
